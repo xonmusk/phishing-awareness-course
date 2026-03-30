@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protect Against Phishing | E-Learning Module</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+:root{
+--navy:#0b1a2e;--nm:#122040;--nl:#1a3058;--slate:#2d3f5e;--steel:#6b7fa0;--silver:#a3b3cc;--ice:#dce4f0;--white:#f5f7fb;
+--gold:#c9a84c;--gl:#e2c86e;--gd:rgba(201,168,76,0.12);
+--red:#d44;--rbg:rgba(204,68,68,0.08);--green:#27ae60;--gbg:rgba(39,174,96,0.08);--amber:#e67e22;--abg:rgba(230,126,34,0.08);
+--fd:'Fraunces',serif;--fb:'IBM Plex Sans',-apple-system,sans-serif;--r:10px;--rs:6px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--fb);background:var(--navy);color:var(--ice);min-height:100vh;overflow-x:hidden}
+.topbar{background:var(--nm);border-bottom:1px solid rgba(201,168,76,0.15);padding:12px 28px;display:flex;align-items:center;justify-content:space-between;position:fixed;top:0;left:0;right:0;z-index:100;height:48px}
+.topbar-l{display:flex;align-items:center;gap:12px}
+.logo{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gl));border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-weight:700;font-size:14px;color:var(--navy)}
+.topbar-t{font-size:10px;font-weight:600;letter-spacing:1.8px;text-transform:uppercase;color:var(--silver)}
+.badge{background:var(--gd);color:var(--gold);padding:3px 10px;border-radius:16px;font-size:9px;font-weight:600;letter-spacing:.8px;text-transform:uppercase}
+.prog-bar{position:fixed;top:48px;left:0;right:0;height:3px;background:var(--nl);z-index:99}
+.prog-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--gl));transition:width .8s cubic-bezier(.4,0,.2,1)}
+.screen{display:none;min-height:calc(100vh - 51px);margin-top:51px;padding:32px 24px;animation:sIn .45s ease}
+.screen.active{display:flex;flex-direction:column;align-items:center;justify-content:center}
+@keyframes sIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.si{max-width:780px;width:100%}
+.label{font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.heading{font-family:var(--fd);font-size:clamp(26px,3.5vw,36px);font-weight:700;color:var(--white);line-height:1.2;margin-bottom:14px}
+.sub{font-size:15px;color:var(--silver);line-height:1.7;margin-bottom:20px;max-width:600px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:linear-gradient(135deg,var(--gold),var(--gl));color:var(--navy);font-family:var(--fb);font-size:14px;font-weight:600;border:none;border-radius:var(--rs);cursor:pointer;transition:all .25s;box-shadow:0 2px 12px rgba(201,168,76,0.25)}
+.btn:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(201,168,76,0.35)}
+.btn-row{display:flex;justify-content:flex-end;margin-top:20px;width:100%}
+.btn-center{display:flex;justify-content:center;margin-top:20px;width:100%}
+.i-text{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--steel);margin-top:14px}
+.i-icon{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--steel);display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-style:italic;color:var(--steel);flex-shrink:0}
+.inst{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--gold);font-weight:500;margin-bottom:14px}
+.inst .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+
+/* Video */
+.vid{background:#000;border-radius:var(--r);overflow:hidden;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;border:1px solid var(--slate);width:100%;cursor:pointer;position:relative;transition:border-color .3s}
+.vid:hover{border-color:var(--gold)}
+.vid video,.vid iframe{width:100%;height:100%;border:none;object-fit:cover}
+.vid-ph{text-align:center;color:var(--steel);padding:20px}
+.play-btn{width:60px;height:60px;border-radius:50%;background:rgba(201,168,76,0.15);border:2px solid var(--gold);display:inline-flex;align-items:center;justify-content:center;font-size:22px;transition:all .3s;margin-bottom:10px}
+.vid:hover .play-btn{background:rgba(201,168,76,0.25);transform:scale(1.05)}
+.vid-hint{font-size:11px;color:var(--slate);margin-top:4px}
+
+.info{background:var(--nm);border-left:3px solid var(--gold);border-radius:0 var(--rs) var(--rs) 0;padding:16px 20px;margin-top:16px;width:100%}
+.info p{font-size:13px;color:var(--silver);line-height:1.65}
+.info strong{color:var(--ice)}
+
+/* Objectives */
+.obj-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+.obj-card{background:var(--nm);border:1px solid var(--slate);border-radius:var(--r);padding:20px;position:relative;overflow:hidden}
+.obj-card:hover{border-color:rgba(201,168,76,0.35)}
+.obj-num{font-family:var(--fd);font-size:38px;font-weight:700;color:rgba(201,168,76,0.1);position:absolute;top:6px;right:12px;line-height:1}
+.obj-t{font-size:12px;font-weight:700;color:var(--gold);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.obj-d{font-size:13px;color:var(--silver);line-height:1.5}
+
+/* Preview */
+.prev{border-radius:var(--r);overflow:hidden;width:100%;border:1px solid var(--slate);cursor:pointer;transition:all .3s;position:relative}
+.prev:hover{transform:scale(1.005);border-color:var(--gold)}
+.prev-img{width:100%;aspect-ratio:16/7;background:var(--nm);display:flex;align-items:center;justify-content:center;position:relative}
+.prev-img .big{font-size:48px}
+.prev-grad{position:absolute;bottom:0;left:0;right:0;height:60%;background:linear-gradient(transparent,rgba(11,26,46,0.95))}
+.prev-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:50%;background:rgba(201,168,76,0.2);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:20px;transition:all .3s;z-index:2}
+.prev:hover .prev-play{background:rgba(201,168,76,0.35);transform:translate(-50%,-50%) scale(1.08)}
+.prev-body{padding:18px 22px;background:var(--nm)}
+.prev-badge{display:inline-block;background:var(--red);color:#fff;padding:3px 10px;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.prev-title{font-family:var(--fd);font-size:20px;font-weight:700;color:var(--white);margin-bottom:6px}
+.prev-teaser{font-size:13px;color:var(--silver);line-height:1.55}
+.prev-meta{font-size:11px;color:var(--steel);margin-top:8px}
+
+/* Email */
+.email{background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:0 8px 36px rgba(0,0,0,0.4);color:#1a1a2e;width:100%}
+.ebar{background:#f4f6f9;padding:8px 14px;display:flex;align-items:center;gap:6px;border-bottom:1px solid #e1e5eb}
+.edot{width:9px;height:9px;border-radius:50%}.edot.r{background:#ff5f57}.edot.y{background:#ffbd2e}.edot.g{background:#28c840}
+.ebar span{margin-left:auto;font-size:10px;color:#8a94a6}
+.ehdr{padding:16px 20px 12px;border-bottom:1px solid #edf0f4}
+.esubj{font-size:15px;font-weight:700;color:#1a202c;margin-bottom:10px}
+.emeta{display:flex;align-items:flex-start;gap:10px}
+.eav{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.efrom{font-size:13px;font-weight:600;color:#2d3748}.eaddr{font-size:11px;color:#a0aec0}
+.ebody{padding:16px 20px 20px;font-size:13px;line-height:1.75;color:#4a5568}.ebody p{margin-bottom:12px}
+.urg{color:#c53030;font-weight:600}
+.plink{color:#2b6cb0;text-decoration:underline;background:#ebf4ff;padding:1px 4px;border-radius:3px}
+.esig{margin-top:16px;padding-top:12px;border-top:1px solid #edf0f4;font-size:12px;color:#718096}
+.esig b{color:#2d3748}
+
+/* Teams */
+.teams{background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:0 8px 36px rgba(0,0,0,0.4);color:#1a1a2e;width:100%}
+.tbar{background:#464775;padding:8px 14px;display:flex;align-items:center;gap:8px}
+.tbar-t{font-size:12px;font-weight:600;color:#fff}
+.tbar-i{margin-left:auto;display:flex;gap:10px;font-size:13px;color:rgba(255,255,255,0.6)}
+.tchat{padding:16px 20px}
+.tmsg{display:flex;gap:8px;margin-bottom:14px;align-items:flex-start}
+.tav{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+.tnm{font-size:12px;font-weight:600;color:#2d3748}.tnm span{font-weight:400;color:#a0aec0;font-size:10px;margin-left:5px}
+.ttxt{font-size:13px;color:#4a5568;line-height:1.6;margin-top:3px}
+.tlink{display:inline-block;background:#e8f0fe;color:#1a73e8;padding:6px 12px;border-radius:5px;font-size:12px;margin-top:6px;border:1px solid #c5d9f0;text-decoration:none}
+.tinput{border-top:1px solid #e8eaef;padding:10px 20px}
+.tinput-box{background:#f4f6f9;border:1px solid #e1e5eb;border-radius:5px;padding:8px 12px;font-size:12px;color:#a0aec0;width:100%}
+
+/* Choices */
+.dq{font-family:var(--fd);font-size:22px;font-weight:600;color:var(--white);margin-bottom:8px}
+.choices{display:flex;flex-direction:column;gap:10px;width:100%}
+.cc{background:var(--nm);border:1px solid var(--slate);border-radius:var(--r);padding:16px 20px;cursor:pointer;display:flex;align-items:flex-start;gap:12px;transition:all .25s}
+.cc:hover{border-color:var(--gold);transform:translateX(4px)}
+.cl{width:28px;height:28px;border-radius:50%;background:var(--nl);border:1px solid var(--slate);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--steel);flex-shrink:0;transition:all .25s}
+.ct{font-size:14px;color:var(--ice);line-height:1.5}
+.cc.correct{border-color:var(--green);background:var(--gbg)}.cc.correct .cl{background:var(--green);color:#fff;border-color:var(--green)}
+.cc.wrong{border-color:var(--red);background:var(--rbg)}.cc.wrong .cl{background:var(--red);color:#fff;border-color:var(--red)}
+.cc.neutral{border-color:var(--amber);background:var(--abg)}.cc.neutral .cl{background:var(--amber);color:#fff;border-color:var(--amber)}
+.cc.disabled{pointer-events:none;opacity:.5}
+
+/* Feedback */
+.fb{border-radius:var(--r);padding:20px 22px;line-height:1.7;display:none;animation:sIn .4s ease;width:100%;margin-top:16px}
+.fb.show{display:block}
+.fb h3{font-family:var(--fd);font-size:17px;font-weight:600;margin-bottom:6px}
+.fb p{font-size:14px}
+.fb-c{background:var(--gbg);border:1px solid rgba(39,174,96,0.2)}.fb-c h3{color:var(--green)}
+.fb-w{background:var(--rbg);border:1px solid rgba(204,68,68,0.2)}.fb-w h3{color:var(--red)}
+.fb-n{background:var(--abg);border:1px solid rgba(230,126,34,0.2)}.fb-n h3{color:var(--amber)}
+
+/* Flags */
+.flags{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%}
+.fcol{background:var(--nm);border-radius:var(--r);padding:20px;border:1px solid var(--slate)}
+.fct{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px}
+.fct.red{color:var(--red)}.fct.grn{color:var(--green)}
+.fi{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px}
+.fd{width:7px;height:7px;border-radius:50%;margin-top:6px;flex-shrink:0}
+.fd.red{background:var(--red)}.fd.grn{background:var(--green)}
+.ft{font-size:13px;color:var(--silver);line-height:1.5}
+
+/* Transition */
+.trans{text-align:center}
+.trans-icon{font-size:44px;margin-bottom:14px}
+.trans-t{font-family:var(--fd);font-size:26px;font-weight:700;color:var(--white);margin-bottom:8px}
+.trans-s{font-size:14px;color:var(--silver)}
+
+/* Landing */
+.landing{text-align:center}
+.landing .heading{font-size:clamp(30px,4.5vw,44px);margin-bottom:10px}
+.ls-row{display:flex;justify-content:center;gap:28px;margin:24px 0}
+.ls{text-align:center}
+.ls .num{font-family:var(--fd);font-size:28px;font-weight:700;color:var(--gold)}
+.ls .lbl{font-size:10px;color:var(--steel);margin-top:3px;letter-spacing:.5px;text-transform:uppercase}
+
+/* STOP */
+.stop-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+.sc{background:var(--nm);border:1px solid var(--slate);border-radius:var(--r);padding:20px;position:relative;overflow:hidden;transition:border-color .3s}
+.sc:hover{border-color:var(--gold)}
+.sc-l{font-family:var(--fd);font-size:38px;font-weight:700;color:rgba(201,168,76,0.15);position:absolute;top:6px;right:12px;line-height:1}
+.sc-t{font-size:13px;font-weight:700;color:var(--gold);margin-bottom:6px}
+.sc-d{font-size:12px;color:var(--silver);line-height:1.55}
+
+/* Takeaways */
+.tk-grid{display:flex;flex-direction:column;gap:12px;width:100%}
+.tk{background:var(--nm);border:1px solid var(--slate);border-radius:var(--r);padding:18px 20px;border-left:3px solid var(--gold)}
+.tk-l{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.tk-t{font-size:13px;color:var(--silver);line-height:1.6}
+
+/* Checklist */
+.ck{display:flex;flex-direction:column;gap:8px;width:100%}
+.ck-i{display:flex;align-items:center;gap:10px;background:var(--nm);border:1px solid var(--slate);border-radius:var(--rs);padding:12px 14px;cursor:pointer;transition:all .2s;font-size:13px;color:var(--ice)}
+.ck-i:hover{border-color:var(--gold)}
+.ck-b{width:20px;height:20px;border-radius:3px;border:2px solid var(--slate);background:var(--nl);display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;flex-shrink:0;transition:all .2s}
+.ck-i.checked .ck-b{background:var(--green);border-color:var(--green);color:#fff}
+.ck-i.checked{border-color:rgba(39,174,96,0.3);background:var(--gbg)}
+
+/* Tabs */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--slate);width:100%;margin-bottom:16px}
+.tab{padding:10px 20px;background:none;border:none;border-bottom:2px solid transparent;color:var(--steel);font-family:var(--fb);font-size:12px;font-weight:600;letter-spacing:.5px;cursor:pointer;transition:all .2s}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.tc{display:none;width:100%}.tc.active{display:block}
+
+.rstep{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px}
+.rnum{min-width:26px;height:26px;border-radius:50%;background:var(--gd);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--gold)}
+.rtxt{font-size:13px;color:var(--silver);line-height:1.6}
+
+.sb{display:inline-block;background:var(--gd);color:var(--gold);padding:5px 12px;border-radius:16px;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px}
+
+@media(max-width:700px){.obj-grid,.stop-grid,.flags{grid-template-columns:1fr}.ls-row{flex-direction:column;gap:12px}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+<div class="topbar-l"><div class="logo">S</div><span class="topbar-t">Cybersecurity Awareness</span></div>
+<span class="badge" id="sL">Welcome</span>
+</div>
+<div class="prog-bar"><div class="prog-fill" id="prog"></div></div>
+
+<!-- S0: LANDING -->
+<div class="screen active" id="s0"><div class="si landing">
+<div class="label">Cybersecurity Awareness Module</div>
+<div class="heading">Protect Personal and Account Information from Phishing Attacks</div>
+<p style="font-size:16px;color:var(--silver);margin-bottom:6px">Scenario-based interactive training for financial services professionals</p>
+<div class="ls-row">
+<div class="ls"><div class="num">18</div><div class="lbl">Minutes</div></div>
+<div class="ls"><div class="num">3</div><div class="lbl">Scenarios</div></div>
+<div class="ls"><div class="num">9</div><div class="lbl">Decisions</div></div>
+</div>
+<div class="btn-center" style="margin-top:28px"><button class="btn" onclick="go(1)" style="padding:16px 44px;font-size:15px">Start Course</button></div>
+<div class="i-text" style="justify-content:center;margin-top:16px"><span class="i-icon">i</span><span>You will face 3 realistic phishing scenarios. Each decision has real consequences. There are no retakes.</span></div>
+<p style="font-size:11px;color:var(--steel);margin-top:28px">Designed by [Your Name] | Learning Experience Design Portfolio</p>
+</div></div>
+
+<!-- S1: CONTEXT VIDEO -->
+<div class="screen" id="s1"><div class="si">
+<div class="vid" onclick="go(2)">
+<div class="vid-ph">
+<div class="play-btn">▶</div>
+<p style="font-size:12px;margin-top:6px">[Replace with your Canva context video]</p>
+<p class="vid-hint">Click to play. Video will auto-advance when complete.</p>
+</div>
+</div>
+<div class="info">
+<p>Financial services is the <strong>#1 target</strong> for phishing attacks globally. Over <strong>3.4 billion</strong> phishing emails are sent every day. New employees are <strong>44% more likely</strong> to click. The average breach costs <strong>$4.88 million</strong>.</p>
+</div>
+</div></div>
+
+<!-- S2: OBJECTIVES -->
+<div class="screen" id="s2"><div class="si">
+<div class="label">Learning Objectives</div>
+<div class="heading">By the end of this course, you will be able to:</div>
+<div class="obj-grid" style="margin-top:8px">
+<div class="obj-card"><div class="obj-num">01</div><div class="obj-t">Identify Red Flags</div><div class="obj-d">Spot at least 4 indicators of a phishing email within 60 seconds, including spoofed domains, urgency language, and suspicious URLs.</div></div>
+<div class="obj-card"><div class="obj-num">02</div><div class="obj-t">Apply the STOP Protocol</div><div class="obj-d">Use the STOP framework (Sender, Threat language, Odd links, Pressure to act) before acting on any suspicious request.</div></div>
+<div class="obj-card"><div class="obj-num">03</div><div class="obj-t">Escalate Correctly</div><div class="obj-d">Report suspicious emails using the proper channel and notify your manager, rather than replying, clicking, or forwarding.</div></div>
+<div class="obj-card"><div class="obj-num">04</div><div class="obj-t">Detect Internal Threats</div><div class="obj-d">Differentiate between legitimate internal messages and attacks from compromised colleague accounts.</div></div>
+</div>
+<div class="btn-row"><button class="btn" onclick="go(3)">Continue</button></div>
+</div></div>
+
+<!-- S3: S1 PREVIEW -->
+<div class="screen" id="s3"><div class="si">
+<div class="prev" onclick="go(4)">
+<div class="prev-img"><span class="big">📧</span><div class="prev-play">▶</div><div class="prev-grad"></div></div>
+<div class="prev-body">
+<div class="prev-badge">Scenario 1</div>
+<div class="prev-title">The Urgent Account Verification</div>
+<div class="prev-teaser">A routine Tuesday morning. An urgent email from IT Security. 2 hours to act, or your account gets suspended. Something feels off, but the clock is ticking.</div>
+<div class="prev-meta">Attack Vector: Email Phishing | Difficulty: Standard</div>
+</div>
+</div>
+<div class="i-text" style="justify-content:center;margin-top:12px"><span class="i-icon">i</span><span>Click the card above to play this scenario</span></div>
+</div></div>
+
+<!-- S4: S1 EMAIL -->
+<div class="screen" id="s4"><div class="si">
+<div class="sb">Scenario 1 of 3</div>
+<p class="sub">It is 9:47 AM on a Tuesday. This email landed in your inbox 3 minutes ago. Read it carefully.</p>
+<div class="email">
+<div class="ebar"><div class="edot r"></div><div class="edot y"></div><div class="edot g"></div><span>Outlook</span></div>
+<div class="ehdr">
+<div class="esubj">URGENT: Account Verification Required, Immediate Action Needed</div>
+<div class="emeta"><div class="eav" style="background:#c53030">IT</div><div><div class="efrom">IT Security Team</div><div class="eaddr">&lt;it-security@jprnorgan-alerts.com&gt;</div></div></div>
+</div>
+<div class="ebody">
+<p>Dear Employee,</p>
+<p>Our security monitoring systems have detected <span class="urg">unauthorized access attempts</span> on your corporate account. As part of our mandatory security protocol, <span class="urg">you must verify your credentials within the next 2 hours</span> or your account will be temporarily suspended.</p>
+<p>Please click the link below to verify your identity:<br><span class="plink">https://jpmorgan-secure-verify.accounts-center.com/auth</span></p>
+<p>This is a <span class="urg">time-sensitive security matter</span>. Failure to verify will result in restricted access to all corporate systems.</p>
+<p><strong>Do not share this email</strong> or forward it to colleagues.</p>
+<div class="esig"><b>Michael Torres</b><br>Information Security Division<br><em style="font-size:11px;color:#a0aec0">Ref: SEC-2026-4471</em></div>
+</div>
+</div>
+<div class="btn-row"><button class="btn" onclick="go(5)">Continue</button></div>
+</div></div>
+
+<!-- S5: S1 DECISION -->
+<div class="screen" id="s5"><div class="si">
+<div class="sb">Scenario 1 of 3</div>
+<div class="dq">What would you do?</div>
+<div class="inst"><span class="dot"></span> Select one option below</div>
+<div class="choices" id="c1">
+<div class="cc" onclick="pick(1,'a')"><div class="cl">A</div><div class="ct">Click the link immediately. You do not want to lose access to your systems, and the email says you only have 2 hours.</div></div>
+<div class="cc" onclick="pick(1,'b')"><div class="cl">B</div><div class="ct">Forward this email to a colleague to ask if they received the same message.</div></div>
+<div class="cc" onclick="pick(1,'c')"><div class="cl">C</div><div class="ct">Do not click anything. Report this email to the Cybersecurity team using the Report Phishing button and notify your manager.</div></div>
+</div>
+</div></div>
+
+<!-- S6: S1 CONSEQUENCE -->
+<div class="screen" id="s6"><div class="si">
+<div class="sb">Scenario 1: Consequence</div>
+<div class="vid" onclick="go(7)">
+<div class="vid-ph">
+<div class="play-btn">▶</div>
+<p style="font-size:12px;margin-top:6px" id="v1l">[Replace with consequence video]</p>
+<p class="vid-hint">Click to play. Advances automatically when complete.</p>
+</div>
+</div>
+<div class="fb fb-w" id="f1a"><h3>Credentials Compromised</h3><p>You clicked the link and entered your credentials on a fake portal. Within minutes, an attacker used them to access internal systems. The sender domain was "jprnorgan" (misspelled). The URL "accounts-center.com" is not a JPMorgan domain.</p></div>
+<div class="fb fb-n" id="f1b"><h3>You Spread the Threat</h3><p>By forwarding the phishing email, you exposed a colleague to the same attack. If they click, two accounts are compromised. The "do not share" instruction was designed to prevent you from checking with IT.</p></div>
+<div class="fb fb-c" id="f1c"><h3>Excellent Instinct</h3><p>You resisted the urgency, did not click, and followed the correct protocol: report to Cybersecurity, notify your manager. The email contained 5 red flags we will review next.</p></div>
+</div></div>
+
+<!-- S7: S1 FLAGS -->
+<div class="screen" id="s7"><div class="si">
+<div class="sb">Scenario 1: Key Signals</div>
+<div class="heading">Red Flags to Spot. Actions to Take.</div>
+<div class="flags">
+<div class="fcol"><div class="fct red">Red Flags</div>
+<div class="fi"><div class="fd red"></div><div class="ft"><strong style="color:var(--ice)">Spoofed domain.</strong> "jprnorgan-alerts.com" is not jpmorgan.com.</div></div>
+<div class="fi"><div class="fd red"></div><div class="ft"><strong style="color:var(--ice)">Urgency language.</strong> "URGENT" and "Immediate Action" bypass rational thinking.</div></div>
+<div class="fi"><div class="fd red"></div><div class="ft"><strong style="color:var(--ice)">Artificial deadline.</strong> "Within 2 hours" creates panic.</div></div>
+<div class="fi"><div class="fd red"></div><div class="ft"><strong style="color:var(--ice)">Suspicious URL.</strong> "accounts-center.com" is not JPMorgan.</div></div>
+<div class="fi"><div class="fd red"></div><div class="ft"><strong style="color:var(--ice)">Isolation tactic.</strong> "Do not share" prevents you from getting help.</div></div>
+</div>
+<div class="fcol"><div class="fct grn">What to Do Instead</div>
+<div class="fi"><div class="fd grn"></div><div class="ft">Do not click any links. Do not reply. Do not forward.</div></div>
+<div class="fi"><div class="fd grn"></div><div class="ft">Use the "Report Phishing" button in Outlook.</div></div>
+<div class="fi"><div class="fd grn"></div><div class="ft">Notify your manager verbally or through a separate channel.</div></div>
+<div class="fi"><div class="fd grn"></div><div class="ft">If you already clicked, call the Cybersecurity Hotline immediately.</div></div>
+</div>
+</div>
+<div class="btn-row"><button class="btn" onclick="go(8)">Continue</button></div>
+</div></div>
+
+<!-- S8: S1 COMPLETE -->
+<div class="screen" id="s8"><div class="si trans">
+<div class="trans-icon">✅</div>
+<div class="trans-t">Scenario 1 Complete</div>
+<div class="trans-s">Next, you will face a different kind of attack.</div>
+<div class="btn-center" style="margin-top:24px"><button class="btn" onclick="go(9)">Continue to Scenario 2</button></div>
+</div></div>
+
+<!-- S9: S2 PREVIEW -->
+<div class="screen" id="s9"><div class="si">
+<div class="prev" onclick="go(10)">
+<div class="prev-img"><span class="big">💸</span><div class="prev-play">▶</div><div class="prev-grad"></div></div>
+<div class="prev-body">
+<div class="prev-badge">Scenario 2</div>
+<div class="prev-title">The Wire Transfer Request</div>
+<div class="prev-teaser">Thursday afternoon. An urgent email from a Senior VP you have met once. $47,500 wire transfer. Confidential project. No time to think.</div>
+<div class="prev-meta">Attack Vector: Business Email Compromise | Difficulty: Elevated</div>
+</div>
+</div>
+<div class="i-text" style="justify-content:center;margin-top:12px"><span class="i-icon">i</span><span>Click the card above to play this scenario</span></div>
+</div></div>
+
+<!-- S10: S2 VIDEO -->
+<div class="screen" id="s10"><div class="si">
+<div class="sb">Scenario 2 of 3</div>
+<div class="inst"><span class="dot"></span> Watch the scenario unfold</div>
+<div class="vid" onclick="go(11)">
+<div class="vid-ph">
+<div class="play-btn">▶</div>
+<p style="font-size:12px;margin-top:6px">[Replace with scenario 2 situation video]</p>
+<p class="vid-hint">Click to play. Advances automatically when complete.</p>
+</div>
+</div>
+<div class="info">
+<p>It is Thursday afternoon. You receive an email from <strong>Robert Chen, SVP</strong>, someone you met once during onboarding. He is requesting a <strong>$47,500 wire transfer</strong> to a new vendor. He says it is part of a confidential acquisition and that compliance has already approved it. He asks you not to involve anyone else.</p>
+</div>
+</div></div>
+
+<!-- S11: S2 DECISION -->
+<div class="screen" id="s11"><div class="si">
+<div class="sb">Scenario 2 of 3</div>
+<div class="dq">What would you do?</div>
+<div class="inst"><span class="dot"></span> Select one option below</div>
+<div class="choices" id="c2">
+<div class="cc" onclick="pick(2,'a')"><div class="cl">A</div><div class="ct">Process the wire transfer immediately. It is from a Senior VP and he says compliance already approved it.</div></div>
+<div class="cc" onclick="pick(2,'b')"><div class="cl">B</div><div class="ct">Call Robert Chen directly using the number from the company directory to verify the request before doing anything.</div></div>
+<div class="cc" onclick="pick(2,'c')"><div class="cl">C</div><div class="ct">Forward the email to your direct manager and ask them to approve it through the normal wire authorization process.</div></div>
+</div>
+</div></div>
+
+<!-- S12: S2 CONSEQUENCE -->
+<div class="screen" id="s12"><div class="si">
+<div class="sb">Scenario 2: Consequence</div>
+<div class="vid" onclick="go(13)">
+<div class="vid-ph">
+<div class="play-btn">▶</div>
+<p style="font-size:12px;margin-top:6px" id="v2l">[Replace with consequence video]</p>
+<p class="vid-hint">Click to play. Advances automatically when complete.</p>
+</div>
+</div>
+<div class="fb fb-w" id="f2a"><h3>$47,500 Sent to a Fraudulent Account</h3><p>This was a BEC attack. The email came from "jpmorqan" (the "q" instead of "g"). There is no Meridian Consulting Group. The money is gone. BEC attacks caused $2.77 billion in U.S. losses in 2024.</p></div>
+<div class="fb fb-c" id="f2b"><h3>Attack Prevented</h3><p>You called Robert directly using a known number. He has no idea about any wire transfer. By verifying through an independent channel, you prevented a $47,500 loss.</p></div>
+<div class="fb fb-n" id="f2c"><h3>Risky Escalation</h3><p>Forwarding to your manager is better than acting alone, but you introduced the phishing email to another inbox. The correct action is to verify with the sender directly using a known phone number.</p></div>
+</div></div>
+
+<!-- S13: S2 FLAGS -->
+<div class="screen" id="s13"><div class="si">
+<div class="sb">Scenario 2: Key Signals</div>
+<div class="heading">Red Flags to Spot. Actions to Take.</div>
+<div class="flags">
+<div class="fcol"><div class="fct red">Red Flags</div>
+<div class="fi"><div class="fd red"></div><div class="ft"><strong style="color:var(--ice)">Spoofed domain.</strong> "jpmorqan" swaps "g" for "q".</div></div>
+<div class="fi"><div class="fd red"></div><div class="ft"><strong style="color:var(--ice)">Bypassed approvals.</strong> Asking to skip normal wire authorization.</div></div>
+<div class="fi"><div class="fd red"></div><div class="ft"><strong style="color:var(--ice)">Secrecy request.</strong> "Do not discuss with anyone" prevents verification.</div></div>
+<div class="fi"><div class="fd red"></div><div class="ft"><strong style="color:var(--ice)">Unfamiliar vendor.</strong> New vendor with new wire details.</div></div>
+<div class="fi"><div class="fd red"></div><div class="ft"><strong style="color:var(--ice)">End of day pressure.</strong> "Before end of business" prevents proper checks.</div></div>
+</div>
+<div class="fcol"><div class="fct grn">What to Do Instead</div>
+<div class="fi"><div class="fd grn"></div><div class="ft">Never process a wire transfer based solely on an email.</div></div>
+<div class="fi"><div class="fd grn"></div><div class="ft">Call the requester using a number from the company directory.</div></div>
+<div class="fi"><div class="fd grn"></div><div class="ft">Any request involving secrecy around money should be treated as suspicious.</div></div>
+<div class="fi"><div class="fd grn"></div><div class="ft">The more senior the sender, the more important it is to verify.</div></div>
+</div>
+</div>
+<div class="btn-row"><button class="btn" onclick="go(14)">Continue</button></div>
+</div></div>
+
+<!-- S14: S2 COMPLETE -->
+<div class="screen" id="s14"><div class="si trans">
+<div class="trans-icon">✅</div>
+<div class="trans-t">Scenario 2 Complete</div>
+<div class="trans-s">One more to go. This next one is the hardest.</div>
+<div class="btn-center" style="margin-top:24px"><button class="btn" onclick="go(15)">Continue to Scenario 3</button></div>
+</div></div>
+
+<!-- S15: S3 PREVIEW -->
+<div class="screen" id="s15"><div class="si">
+<div class="prev" onclick="go(16)">
+<div class="prev-img"><span class="big">💬</span><div class="prev-play">▶</div><div class="prev-grad"></div></div>
+<div class="prev-body">
+<div class="prev-badge" style="background:var(--amber)">Scenario 3</div>
+<div class="prev-title">The Trusted Colleague</div>
+<div class="prev-teaser">Monday morning. A Teams message from Priya, someone you have worked with for two years. She is sharing a link to the new HR portal. She already enrolled. No obvious red flags. Or are there?</div>
+<div class="prev-meta">Attack Vector: Compromised Internal Account | Difficulty: Advanced</div>
+</div>
+</div>
+<div class="i-text" style="justify-content:center;margin-top:12px"><span class="i-icon">i</span><span>Click the card above to play this scenario</span></div>
+</div></div>
+
+<!-- S16: S3 TEAMS -->
+<div class="screen" id="s16"><div class="si">
+<div class="sb">Scenario 3 of 3</div>
+<p class="sub">It is Monday morning. You get this message on Microsoft Teams from Priya Sharma, a colleague you have worked with for two years.</p>
+<div class="teams">
+<div class="tbar"><span class="tbar-t">Microsoft Teams: Priya Sharma</span><div class="tbar-i"><span>📞</span><span>📹</span></div></div>
+<div class="tchat">
+<div class="tmsg"><div class="tav" style="background:#805ad5">PS</div><div><div class="tnm">Priya Sharma <span>10:14 AM</span></div><div class="ttxt">Hey! Have you enrolled in the new benefits portal yet? HR just rolled it out this morning</div></div></div>
+<div class="tmsg"><div class="tav" style="background:#805ad5">PS</div><div><div class="tnm">Priya Sharma <span>10:14 AM</span></div><div class="ttxt">You need to log in with your corporate credentials to activate your account. The deadline is today</div></div></div>
+<div class="tmsg"><div class="tav" style="background:#805ad5">PS</div><div><div class="tnm">Priya Sharma <span>10:15 AM</span></div><div class="ttxt">Here is the link. I already did mine, took like 2 minutes</div><a class="tlink" href="javascript:void(0)">hr-benefits-portal-jpmorgan.secureworkspace.net/enroll</a></div></div>
+</div>
+<div class="tinput"><div class="tinput-box">Type a message...</div></div>
+</div>
+<div class="btn-row"><button class="btn" onclick="go(17)">Continue</button></div>
+</div></div>
+
+<!-- S17: S3 DECISION -->
+<div class="screen" id="s17"><div class="si">
+<div class="sb">Scenario 3 of 3</div>
+<div class="dq">What would you do?</div>
+<div class="inst"><span class="dot"></span> Select one option below</div>
+<div class="choices" id="c3">
+<div class="cc" onclick="pick(3,'a')"><div class="cl">A</div><div class="ct">Click the link and log in. It is Priya, you have worked together for years, and she says she already did it.</div></div>
+<div class="cc" onclick="pick(3,'b')"><div class="cl">B</div><div class="ct">Do not click the link. Walk over to Priya's desk or call her directly to ask about it in person.</div></div>
+<div class="cc" onclick="pick(3,'c')"><div class="cl">C</div><div class="ct">Reply on Teams asking Priya to confirm the URL is legitimate before you click.</div></div>
+</div>
+</div></div>
+
+<!-- S18: S3 CONSEQUENCE -->
+<div class="screen" id="s18"><div class="si">
+<div class="sb">Scenario 3: Consequence</div>
+<div class="vid" onclick="go(19)">
+<div class="vid-ph">
+<div class="play-btn">▶</div>
+<p style="font-size:12px;margin-top:6px" id="v3l">[Replace with consequence video]</p>
+<p class="vid-hint">Click to play. Advances automatically when complete.</p>
+</div>
+</div>
+<div class="fb fb-w" id="f3a"><h3>Credentials Harvested</h3><p>Priya's account was hacked. She did not send those messages. The link leads to a fake HR portal that captured your credentials. 58% of phishing now comes from compromised legitimate accounts.</p></div>
+<div class="fb fb-c" id="f3b"><h3>Attack Stopped</h3><p>You walked over to Priya. She had no idea. Her account was compromised. You reported it and Cybersecurity locked it within 8 minutes. Out-of-band verification is the only reliable defense.</p></div>
+<div class="fb fb-n" id="f3c"><h3>Wrong Channel</h3><p>You replied on Teams, but the attacker controls that account. They will simply reply "Yeah it is legit!" The only safe verification is through a completely separate channel: in person, by phone, or a different platform.</p></div>
+</div></div>
+
+<!-- S19: S3 FLAGS -->
+<div class="screen" id="s19"><div class="si">
+<div class="sb">Scenario 3: Key Signals</div>
+<div class="heading">Red Flags to Spot. Actions to Take.</div>
+<div class="flags">
+<div class="fcol"><div class="fct red">Red Flags</div>
+<div class="fi"><div class="fd red"></div><div class="ft"><strong style="color:var(--ice)">Suspicious URL.</strong> "secureworkspace.net" is not JPMorgan.</div></div>
+<div class="fi"><div class="fd red"></div><div class="ft"><strong style="color:var(--ice)">Credential request.</strong> Any link asking for your login should be verified.</div></div>
+<div class="fi"><div class="fd red"></div><div class="ft"><strong style="color:var(--ice)">Same day deadline.</strong> "The deadline is today" creates urgency.</div></div>
+<div class="fi"><div class="fd red"></div><div class="ft"><strong style="color:var(--ice)">Unusual pattern.</strong> Does Priya normally send you HR links?</div></div>
+</div>
+<div class="fcol"><div class="fct grn">What to Do Instead</div>
+<div class="fi"><div class="fd grn"></div><div class="ft">Verify in person or by phone. Never use the same channel.</div></div>
+<div class="fi"><div class="fd grn"></div><div class="ft">Navigate to portals directly through the intranet or bookmarks.</div></div>
+<div class="fi"><div class="fd grn"></div><div class="ft">If the account is compromised, report to Cybersecurity immediately.</div></div>
+<div class="fi"><div class="fd grn"></div><div class="ft">Trust the person. Always verify the message separately.</div></div>
+</div>
+</div>
+<div class="btn-row"><button class="btn" onclick="go(20)">Continue</button></div>
+</div></div>
+
+<!-- S20: STOP -->
+<div class="screen" id="s20"><div class="si">
+<div class="label">Key Framework</div>
+<div class="heading">Remember: STOP Before You Act</div>
+<p class="sub">Before acting on any request for credentials, transfers, or sensitive data:</p>
+<div class="stop-grid">
+<div class="sc"><div class="sc-l">S</div><div class="sc-t">Sender</div><div class="sc-d">Check the actual email address. Look for misspellings or unusual domains.</div></div>
+<div class="sc"><div class="sc-l">T</div><div class="sc-t">Threat Language</div><div class="sc-d">Urgency, fear, "your account will be suspended" are social engineering hallmarks.</div></div>
+<div class="sc"><div class="sc-l">O</div><div class="sc-t">Odd Links</div><div class="sc-d">Hover before clicking. Does the domain match the real company?</div></div>
+<div class="sc"><div class="sc-l">P</div><div class="sc-t">Pressure to Act</div><div class="sc-d">Tight deadlines, secrecy, bypassed processes. Slow down and verify.</div></div>
+</div>
+<div class="btn-row"><button class="btn" onclick="go(21)">Continue</button></div>
+</div></div>
+
+<!-- S21: JOB AID -->
+<div class="screen" id="s21"><div class="si">
+<div class="label">Performance Support</div>
+<div class="heading">Phishing Response Job Aid</div>
+<div class="i-text" style="margin-bottom:16px"><span class="i-icon">i</span><span>Bookmark or screenshot this. Use it anytime you receive a suspicious request.</span></div>
+<div class="tabs">
+<button class="tab active" onclick="switchTab('takeaways')">Key Takeaways</button>
+<button class="tab" onclick="switchTab('checklist')">STOP Checklist</button>
+<button class="tab" onclick="switchTab('report')">How to Report</button>
+</div>
+<div class="tc active" id="tab-takeaways">
+<div class="tk-grid">
+<div class="tk"><div class="tk-l">Scenario 1: Email Phishing</div><div class="tk-t">Always check the actual sender address. Legitimate IT teams never impose arbitrary deadlines via email, never ask you to verify credentials through a link, and never tell you to keep it secret.</div></div>
+<div class="tk"><div class="tk-l">Scenario 2: Business Email Compromise</div><div class="tk-t">Any request to bypass normal approval processes is a red flag. The more senior the sender appears, the more important it is to verify. Always call using a number you look up yourself.</div></div>
+<div class="tk"><div class="tk-l">Scenario 3: Compromised Internal Account</div><div class="tk-t">Trust the person, verify the message. Even colleagues you have known for years can be compromised. Always verify through a different communication channel.</div></div>
+</div>
+</div>
+<div class="tc" id="tab-checklist">
+<p style="font-size:13px;color:var(--steel);margin-bottom:12px">Click each item as you verify it:</p>
+<div class="ck">
+<div class="ck-i" onclick="this.classList.toggle('checked')"><div class="ck-b">✓</div><div><strong style="color:var(--gold)">S: Sender Verified.</strong> I have checked the actual email address and confirmed it is from a legitimate domain.</div></div>
+<div class="ck-i" onclick="this.classList.toggle('checked')"><div class="ck-b">✓</div><div><strong style="color:var(--gold)">T: No Threat Language.</strong> The message does not use urgent threats or unusual emotional pressure.</div></div>
+<div class="ck-i" onclick="this.classList.toggle('checked')"><div class="ck-b">✓</div><div><strong style="color:var(--gold)">O: Links Safe.</strong> I have hovered over all links and confirmed they lead to legitimate domains.</div></div>
+<div class="ck-i" onclick="this.classList.toggle('checked')"><div class="ck-b">✓</div><div><strong style="color:var(--gold)">P: No Undue Pressure.</strong> No artificial deadline, no secrecy request, no bypassed processes.</div></div>
+</div>
+<div class="info" style="margin-top:14px"><p><strong>If any item fails:</strong> Do NOT click, reply, or forward. Use the "Report Phishing" button in Outlook and notify your manager.</p></div>
+</div>
+<div class="tc" id="tab-report">
+<div style="background:var(--nm);border-radius:var(--r);padding:20px">
+<div class="rstep"><div class="rnum">1</div><div class="rtxt"><strong style="color:var(--ice)">DO NOT</strong> click any links, open attachments, or reply.</div></div>
+<div class="rstep"><div class="rnum">2</div><div class="rtxt">Click the <strong style="color:var(--gold)">"Report Phishing"</strong> button in Outlook.</div></div>
+<div class="rstep"><div class="rnum">3</div><div class="rtxt"><strong style="color:var(--ice)">Notify your manager</strong> verbally or through a separate channel.</div></div>
+<div class="rstep"><div class="rnum">4</div><div class="rtxt">If you <strong style="color:var(--red)">already clicked</strong>, call the Cybersecurity Hotline <strong>immediately</strong>.</div></div>
+</div>
+</div>
+<div class="btn-row"><button class="btn" onclick="go(22)">Finish Course</button></div>
+</div></div>
+
+<!-- S22: COMPLETE -->
+<div class="screen" id="s22"><div class="si" style="text-align:center">
+<div class="label">Course Complete</div>
+<div class="heading">Phishing Awareness Training Complete</div>
+<p style="font-size:15px;color:var(--silver);margin-bottom:28px;line-height:1.7;max-width:520px;margin-left:auto;margin-right:auto">Phishing awareness is not a one-time training. It is a continuous practice. Apply the STOP framework every day. When in doubt, verify independently. Your vigilance protects not just your account, but every client and colleague connected to it.</p>
+<div class="btn-center"><button class="btn" onclick="location.reload()">Replay Course</button></div>
+<p style="font-size:11px;color:var(--steel);margin-top:40px;letter-spacing:.5px">
+PORTFOLIO SAMPLE | Designed by [Your Name]<br>
+Functional prototype | Scenario-based learning methodology<br>
+Merrill's First Principles of Instruction | Situated Cognition Theory
+</p>
+</div></div>
+
+<script>
+const TOTAL=23;let cur=0;const ch={};
+const lbl=['Welcome','Context','Objectives','Scenario 1 Preview','Scenario 1','Scenario 1: Decision','Scenario 1: Consequence','Scenario 1: Red Flags','Scenario 1 Complete','Scenario 2 Preview','Scenario 2','Scenario 2: Decision','Scenario 2: Consequence','Scenario 2: Red Flags','Scenario 2 Complete','Scenario 3 Preview','Scenario 3','Scenario 3: Decision','Scenario 3: Consequence','Scenario 3: Red Flags','STOP Framework','Job Aid','Complete'];
+const keys={1:{correct:'c',wrong:'a',neutral:'b'},2:{correct:'b',wrong:'a',neutral:'c'},3:{correct:'b',wrong:'a',neutral:'c'}};
+
+function go(n){
+document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+document.getElementById('s'+n).classList.add('active');
+cur=n;
+document.getElementById('prog').style.width=(n/(TOTAL-1)*100)+'%';
+document.getElementById('sL').textContent=lbl[n]||'';
+window.scrollTo({top:0,behavior:'instant'});
+if(n===6&&ch[1])showFB(1);
+if(n===12&&ch[2])showFB(2);
+if(n===18&&ch[3])showFB(3);
+}
+
+function pick(sc,c){
+ch[sc]=c;
+const k=keys[sc];
+const box=document.getElementById('c'+sc);
+box.querySelectorAll('.cc').forEach(x=>x.classList.add('disabled'));
+const cards=box.querySelectorAll('.cc');
+const idx={a:0,b:1,c:2};
+if(c===k.correct)cards[idx[c]].classList.add('correct');
+else if(c===k.wrong)cards[idx[c]].classList.add('wrong');
+else cards[idx[c]].classList.add('neutral');
+if(c!==k.correct)cards[idx[k.correct]].classList.add('correct');
+// Auto-advance to consequence after a beat
+const nextMap={1:6,2:12,3:18};
+setTimeout(()=>go(nextMap[sc]),1200);
+}
+
+function showFB(sc){
+const c=ch[sc];const k=keys[sc];
+document.getElementById('f'+sc+c).classList.add('show');
+const vlbl={1:'v1l',2:'v2l',3:'v3l'};
+const el=document.getElementById(vlbl[sc]);
+if(c===k.correct)el.textContent='Consequence: Correct Response';
+else if(c===k.wrong)el.textContent='Consequence: Wrong Decision';
+else el.textContent='Consequence: Risky Decision';
+}
+
+function switchTab(id){
+document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+document.querySelectorAll('.tc').forEach(c=>c.classList.remove('active'));
+document.getElementById('tab-'+id).classList.add('active');
+event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
